@@ -21,9 +21,49 @@ class LinkedList:
         self.head: Node | None = None
         self.size = 0
 
-    def add(self, item: Any) -> None:
-        self.head = Node(item, self.head)
+    def add(self, item: Any, position: int = 0) -> bool:
+        """
+        Add an item to the LinkedList at the specified position.
+        Default position is 0 (the head).
+
+        Args:
+            item (Any): The item to add to the LinkedList.
+            position (int, optional): The position at which to add the item.
+            Defaults to 0.
+
+        Raises:
+            ValueError: If the position is negative.
+
+        >>> linked_list = LinkedList()
+        >>> linked_list.add(1)
+        >>> linked_list.add(2)
+        >>> linked_list.add(3)
+        >>> linked_list.add(4, 2)
+        >>> print(linked_list)
+        3 --> 2 --> 4 --> 1
+        """
+        if position < 0:
+            raise ValueError("Position must be non-negative")
+
+        if position == 0 or self.head is None:
+            new_node = Node(item, self.head)
+            self.head = new_node
+        else:
+            current = self.head
+            counter = 0
+            while current and counter < position:
+                current = current.next
+                counter += 1
+
+            if current:  # Check if current is not None
+                new_node = Node(item, current.next)
+                current.next = new_node
+                return True
+            else:
+                return False
+
         self.size += 1
+        return True
 
     def remove(self) -> Any:
         # Switched 'self.is_empty()' to 'self.head is None'
